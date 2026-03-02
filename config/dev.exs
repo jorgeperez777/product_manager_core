@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :product_manager_core, ProductManagerCore.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: System.get_env("DB_USERNAME", "postgres"),
+  password: System.get_env("DB_PASSWORD", "postgres"),
   hostname: "localhost",
-  database: "product_manager_core_dev",
+  database: System.get_env("DB_NAME", "product_manager_core_dev"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
