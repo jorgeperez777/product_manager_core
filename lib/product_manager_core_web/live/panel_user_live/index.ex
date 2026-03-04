@@ -1,4 +1,4 @@
-defmodule ProductManagerCoreWeb.HomeLive.Index do
+defmodule ProductManagerCoreWeb.PanelUserLive.Index do
   use ProductManagerCoreWeb, :live_view
 
   @impl true

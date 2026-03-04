@@ -17,6 +17,14 @@ defmodule ProductManagerCoreWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :root_only do
+    plug ProductManagerCoreWeb.RequreRole, ["root"]
+  end
+
+  pipeline :admin_only do
+    plug ProductManagerCoreWeb.RequreRole, ["admin"]
+  end
+
   # scope "/", ProductManagerCoreWeb do
   #   pipe_through :browser
 
@@ -70,6 +78,24 @@ defmodule ProductManagerCoreWeb.Router do
       live "/dashboard", HomeLive.Index, :index
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+    end
+  end
+
+  scope "/", ProductManagerCoreWeb do
+    pipe_through [:browser, :require_authenticated_user, :admin_only]
+
+    live_session :admin,
+      on_mount: [{ProductManagerCoreWeb.UserAuth, :ensure_authenticated}] do
+      live "/providers", ProviderLive.Index, :index
+    end
+  end
+
+  scope "/", ProductManagerCoreWeb do
+    pipe_through [:browser, :require_authenticated_user, :root_only]
+
+    live_session :root,
+      on_mount: [{ProductManagerCoreWeb.UserAuth, :ensure_authenticated}] do
+      live "/users", PanelUserLive.Index, :index
     end
   end
 
