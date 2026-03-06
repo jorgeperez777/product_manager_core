@@ -154,7 +154,9 @@ defmodule ProductManagerCoreWeb.UserAuth do
     socket = mount_current_user(socket, session)
 
     if socket.assigns.current_user do
-      {:cont, socket}
+      {:cont,
+       socket
+       |> Phoenix.LiveView.attach_hook(:set_current_url, :handle_params, &set_current_url/3)}
     else
       socket =
         socket
@@ -227,4 +229,8 @@ defmodule ProductManagerCoreWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: ~p"/dashboard"
+
+  defp set_current_url(_params, url, socket) do
+    {:cont, Phoenix.Component.assign(socket, current_url: URI.parse(url))}
+  end
 end
