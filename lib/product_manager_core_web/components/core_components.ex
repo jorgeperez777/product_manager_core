@@ -201,8 +201,8 @@ defmodule ProductManagerCoreWeb.CoreComponents do
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+    <.form :let={f} for={@for} as={@as} {@rest} class="space-y-4 md:space-y-6">
+      <div class="mt-10 space-y-8 bg-white dark:bg-neutral-800 text-black dark:text-white p-4 rounded-lg">
         {render_slot(@inner_block, f)}
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           {render_slot(action, f)}
@@ -310,7 +310,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
 
     ~H"""
     <div>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600 dark:text-white">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
           type="checkbox"
@@ -318,7 +318,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-zinc-300 text-zinc-900 focus:ring-0 dark:bg-neutral-800 dark:border-neutral-500"
           {@rest}
         />
         {@label}
@@ -335,7 +335,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm dark:bg-gray-800"
         multiple={@multiple}
         {@rest}
       >
@@ -377,9 +377,11 @@ defmodule ProductManagerCoreWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-800 ",
+          @errors == [] &&
+            "border-zinc-300 focus:border-zinc-400  dark:focus:border-neutral-500 dark:border-neutral-500",
+          @errors != [] &&
+            "border-rose-400 focus:border-rose-400  dark:focus:border-neutral-500 dark:border-neutral-500"
         ]}
         {@rest}
       />
@@ -396,7 +398,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800 dark:text-white">
       {render_slot(@inner_block)}
     </label>
     """
@@ -429,7 +431,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-zinc-800 dark:text-white">
           {render_slot(@inner_block)}
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
@@ -683,14 +685,14 @@ defmodule ProductManagerCoreWeb.CoreComponents do
     ~H"""
     <.link
       navigate={@navigate}
-      class={[is_current_url(@current_url, @navigate) && "bg-gray-100", @class]}
+      class={[is_current_url(@current_url, @navigate) && "bg-gray-100 dark:bg-neutral-700", @class]}
     >
       {render_slot(@inner_block)}
     </.link>
     """
   end
 
-  defp is_current_url(nil, url) do
+  defp is_current_url(nil, _url) do
   end
 
   defp is_current_url(%URI{} = current_url, url) do
@@ -720,7 +722,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
              "transform opacity-100 scale-100"}
         )
       }
-      class="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      class="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-neutral-700"
       id="user-menu-button"
       aria-expanded="false"
       aria-haspopup="true"
@@ -730,7 +732,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
 
     <div
       id={@to}
-      class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-neutral-700"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="user-menu-button"

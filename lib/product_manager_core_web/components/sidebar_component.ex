@@ -25,7 +25,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
     <div>
       <%= if @current_user do %>
         <div
-          class="relative z-40 md:hidden"
+          class="relative z-40 md:hidden "
           phx-mounted={show_sidebar("sidebar-mobile", @show)}
           role="dialog"
           aria-modal="true"
@@ -33,8 +33,8 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
         >
           <div class="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
           <div class="fixed inset-0 z-40 flex">
-            <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4">
-              <div class="absolute top-0 right-0 -mr-12 pt-2">
+            <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4 dark:bg-neutral-900">
+              <div class="absolute top-0 right-0 -mr-12 pt-2 ">
                 <button
                   type="button"
                   phx-click={
@@ -66,9 +66,12 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
                       <.active_link
                         current_url={@current_url}
                         navigate={item.path}
-                        class="text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                        class="text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md dark:text-white dark:hover:bg-neutral-800"
                       >
-                        <.icon name={item.icon} class="text-gray-500 mr-4 flex-shrink-0 h-6 w-6" />{item.name}
+                        <.icon
+                          name={item.icon}
+                          class="text-gray-500 mr-4 flex-shrink-0 h-6 w-6 dark:text-white"
+                        />{item.name}
                       </.active_link>
                     <% end %>
                   <% end %>
@@ -83,7 +86,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
         </div>
         <div class="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
           <!-- Sidebar component, swap this element with another sidebar if you like -->
-          <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
+          <div class="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 dark:bg-neutral-800 dark:border-neutral-900">
             <div class="flex flex-shrink-0 items-center px-4">
               <img class="h-8 w-auto" src={@logo} />
             </div>
@@ -94,9 +97,12 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
                     <.active_link
                       current_url={@current_url}
                       navigate={item.path}
-                      class="text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                      class="text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md dark:text-white dark:hover:bg-neutral-900 hover:bg-gray-50"
                     >
-                      <.icon name={item.icon} class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6" />{item.name}
+                      <.icon
+                        name={item.icon}
+                        class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6 dark:text-white"
+                      />{item.name}
                     </.active_link>
                   <% end %>
                 <% end %>
@@ -106,13 +112,13 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
         </div>
 
         <div class="flex flex-1 flex-col md:pl-64">
-          <div class="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
+          <div class="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow  dark:bg-neutral-800">
             <button
               phx-click={
                 JS.push("toggle", target: @myself) |> toggle_sidebar("sidebar-mobile", @show)
               }
               type="button"
-              class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+              class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-neutral-900"
             >
               <span class="sr-only">Abrir menu del sitio</span>
               <.icon name="hero-bars-3-bottom-left" class="h-6 w-6" />
@@ -121,11 +127,11 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
               <div class="ml-4 flex items-center md:ml-6">
 
     <!-- Profile dropdown -->
-                <div class="relative ml-3">
+                <div class="relative ml-3 ">
                   <.dropdown show={false} to="user_menu">
                     <:content>
                       <span class="sr-only">Abrir menu de usuario</span>
-                      <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                      <div class="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-neutral-700">
                         <span class="font-medium text-gray-600 dark:text-gray-300">
                           {generate_avatar_initials(@current_user)}
                         </span>
@@ -134,7 +140,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
 
                     <.link
                       navigate={~p"/users/settings"}
-                      class="block px-4 py-2 text-sm text-gray-700"
+                      class="block px-4 py-2 text-sm text-gray-700 dark:bg-neutral-700 dark:text-white"
                       role="menuitem"
                       tabindex="-1"
                       id="user-settings"
@@ -144,7 +150,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
                     <.link
                       href={~p"/logout"}
                       method="delete"
-                      class="block px-4 py-2 text-sm text-gray-700"
+                      class="block px-4 py-2 text-sm text-gray-700 dark:bg-neutral-700 dark:text-white"
                       role="menuitem"
                       tabindex="-1"
                       id="user-menu-item-2"

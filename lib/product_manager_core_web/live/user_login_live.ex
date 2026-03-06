@@ -4,7 +4,7 @@ defmodule ProductManagerCoreWeb.UserLoginLive do
   def render(assigns) do
     ~H"""
     <div class="mx-auto max-w-sm">
-      <.header class="text-center">
+      <%!-- <.header class="text-center">
         Log in to account
         <:subtitle>
           Don't have an account?
@@ -13,9 +13,33 @@ defmodule ProductManagerCoreWeb.UserLoginLive do
           </.link>
           for an account now.
         </:subtitle>
+      </.header> --%>
+
+      <.header class="text-center  dark:text-gray-200">
+        Iniciar sesion
       </.header>
 
+      <div class="p-5 flex justify-center py-8">
+        <img class="h-12 w-auto" src={~p"/images/logo.svg"} />
+      </div>
       <.simple_form for={@form} id="login_form" action={~p"/login"} phx-update="ignore">
+        <.input field={@form[:email]} type="email" label="Correo electronico" required />
+        <.input field={@form[:password]} type="password" label="Contraseña" required />
+
+        <:actions>
+          <.input field={@form[:remember_me]} type="checkbox" label="Recordarme" />
+          <.link href={~p"/reset_password"} class="text-sm font-semibold ">
+            ¿Olvidaste tu contraseña?
+          </.link>
+        </:actions>
+        <:actions>
+          <.button phx-disable-with="Signing in..." class="w-full">
+            Entrar<span aria-hidden="true">→</span>
+          </.button>
+        </:actions>
+      </.simple_form>
+
+      <%!-- <.simple_form for={@form} id="login_form" action={~p"/login"} phx-update="ignore">
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
 
@@ -30,7 +54,7 @@ defmodule ProductManagerCoreWeb.UserLoginLive do
             Log in <span aria-hidden="true">→</span>
           </.button>
         </:actions>
-      </.simple_form>
+      </.simple_form> --%>
     </div>
     """
   end
