@@ -78,6 +78,11 @@ defmodule ProductManagerCoreWeb.Router do
       live "/dashboard", HomeLive.Index, :index
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/products", ProductLive.Index, :index
+      live "/products/new", ProductLive.Index, :new
+      live "/products/:id/edit", ProductLive.Index, :edit
+      live "/categories", CategoryLive.Index, :index
+      live "/providers", ProviderLive.Index, :index
     end
   end
 
@@ -86,7 +91,10 @@ defmodule ProductManagerCoreWeb.Router do
 
     live_session :admin,
       on_mount: [{ProductManagerCoreWeb.UserAuth, :ensure_authenticated}] do
-      live "/providers", ProviderLive.Index, :index
+      live "/providers/new", ProviderLive.Index, :new
+      live "/products/new", ProductLive.Index, :new
+      live "/categories/new", CategoryLive.Index, :new
+      live "/categories/:id/edit", CategoryLive.Index, :edit
     end
   end
 

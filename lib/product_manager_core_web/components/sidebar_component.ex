@@ -14,7 +14,19 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
           path: ~p"/providers",
           name: "Proveedores",
           icon: "hero-building-office-2",
-          roles: ["root", "admin"]
+          roles: ["root", "admin", "user"]
+        },
+        %{
+          path: ~p"/categories",
+          name: "Categorias",
+          icon: "hero-square-3-stack-3d",
+          roles: ["root", "admin", "user"]
+        },
+        %{
+          path: ~p"/products",
+          name: "Productos",
+          icon: "hero-clipboard-document",
+          roles: ["root", "admin", "user"]
         },
         %{path: ~p"/users", name: "Usuarios", icon: "hero-users", roles: ["root"]}
       ])
@@ -92,7 +104,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
             </div>
             <div class="mt-5 flex flex-grow flex-col">
               <nav class="flex-1 space-y-1 px-2 pb-4">
-                <%= for item <- @menu_items  |> IO.inspect() do %>
+                <%= for item <- @menu_items do %>
                   <%= if  has_access?(item.roles, @list_roles_user) do %>
                     <.active_link
                       current_url={@current_url}
