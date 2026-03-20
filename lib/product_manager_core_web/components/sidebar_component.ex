@@ -43,7 +43,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
           aria-modal="true"
           id="sidebar-mobile"
         >
-          <div class="fixed inset-0 bg-gray-600 bg-opacity-75"></div>
+          <div class="fixed inset-0 bg-gray-600 bg-opacity-75 dark:bg-neutral-800 dark:bg-opacity-75"></div>
           <div class="fixed inset-0 z-40 flex">
             <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white pt-5 pb-4 dark:bg-neutral-900">
               <div class="absolute top-0 right-0 -mr-12 pt-2 ">
@@ -63,7 +63,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
                 >
                   <span class="sr-only">Close sidebar</span>
                   <!-- Heroicon name: outline/x-mark -->
-                  <.icon name="hero-x-mark" class="h-6 w-6 text-white" />
+                  <.icon name="hero-x-mark" class="h-6 w-6 text-white dark:text-white" />
                 </button>
               </div>
 
@@ -133,7 +133,7 @@ defmodule ProductManagerCoreWeb.SidebarComponent do
               class="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden dark:border-neutral-900"
             >
               <span class="sr-only">Abrir menu del sitio</span>
-              <.icon name="hero-bars-3-bottom-left" class="h-6 w-6" />
+              <.icon name="hero-bars-3-bottom-left" class="h-6 w-6 dark:text-white" />
             </button>
             <div class="flex flex-1 justify-end px-4">
               <div class="ml-4 flex items-center md:ml-6">

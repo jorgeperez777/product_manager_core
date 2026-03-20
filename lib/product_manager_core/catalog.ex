@@ -249,6 +249,122 @@ defmodule ProductManagerCore.Catalog do
     Repo.all(Product) |> Repo.preload([:categories, :provider])
   end
 
+  def list_products(args) do
+    from(q in Product,
+      order_by: [desc: q.inserted_at]
+    )
+    |> apply_product_filters(args)
+    |> Repo.all()
+    |> Repo.preload([:categories, :provider])
+  end
+
+  defp apply_product_filters(query, opts) do
+    Enum.reduce(opts, query, fn
+      {:active, active}, query ->
+        from q in query, where: q.active == ^active
+
+      {:pagination, pagination}, query ->
+        pagination =
+          Map.has_key?(pagination, :size)
+          |> case do
+            true ->
+              %{
+                size:
+                  case pagination.size do
+                    nil -> nil
+                    _ -> String.to_integer(pagination.size)
+                  end,
+                page:
+                  case pagination.size do
+                    nil -> nil
+                    _ -> String.to_integer(pagination.page)
+                  end
+              }
+
+            _ ->
+              pagination
+          end
+
+        if map_size(pagination) > 0 do
+          if !is_nil(pagination.size) and !is_nil(pagination.page) do
+            from(q in query,
+              limit: ^pagination.size,
+              offset: ^((pagination.page - 1) * pagination.size)
+            )
+          else
+            query
+          end
+        else
+          query
+        end
+
+      {:size_items, size_items}, query ->
+        if size_items != "" do
+          size_items_converter =
+            case size_items do
+              nil -> nil
+              _ -> String.to_integer(size_items)
+            end
+
+          if !is_nil(size_items_converter) do
+            from(q in query,
+              limit: ^size_items_converter
+            )
+          else
+            query
+          end
+        else
+          query
+        end
+
+      {:page, page}, query ->
+        if page != "" do
+          page_converter =
+            case page do
+              nil -> nil
+              _ -> String.to_integer(page)
+            end
+
+          size_items = Map.get(opts, :size_items, nil)
+
+          size_items_converter =
+            case size_items do
+              nil -> nil
+              _ -> String.to_integer(size_items)
+            end
+
+          # IO.inspect(opts)
+
+          if !is_nil(page_converter) and !is_nil(size_items_converter) do
+            from(q in query,
+              offset: ^((page_converter - 1) * size_items_converter)
+            )
+          else
+            query
+          end
+        else
+          query
+        end
+
+      {:name, name}, query ->
+        if name != "" do
+          from(q in query,
+            where:
+              fragment(
+                "translate(?,'áéíóúÁÉÍÓÚçÇüÜ', 'aeiouAEIOUcCuU') ILIKE translate(?,'áéíóúÁÉÍÓÚçÇüÜ', 'aeiouAEIOUcCuU')",
+                q.name,
+                ^"%#{name}%"
+              )
+          )
+        else
+          query
+        end
+
+      _, query ->
+        query
+    end)
+  end
+
   @doc """
   Gets a single product.
 
@@ -264,6 +380,9 @@ defmodule ProductManagerCore.Catalog do
 
   """
   def get_product!(id), do: Repo.get!(Product, id) |> Repo.preload([:categories, :provider])
+
+  def get_product_by_slug!(slug),
+    do: Repo.get_by!(Product, slug: slug) |> Repo.preload([:categories])
 
   @doc """
   Creates a product.

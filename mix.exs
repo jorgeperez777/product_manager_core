@@ -59,7 +59,9 @@ defmodule ProductManagerCore.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:tarams, "~> 1.0.0"},
+      {:number, "~> 1.0.1"}
     ]
   end
 

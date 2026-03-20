@@ -36,6 +36,7 @@ defmodule ProductManagerCore.Catalog.Provider do
     |> unique_constraint(:slug)
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/)
+    |> validate_status(attrs)
     |> validate_inclusion(:status, ~w(active inactive))
   end
 
@@ -53,11 +54,32 @@ defmodule ProductManagerCore.Catalog.Provider do
     end
   end
 
+  def validate_status(changeset, attrs) do
+    case changeset do
+      %{changes: %{active: active}} ->
+        changeset
+        |> put_change(
+          :status,
+          generate_status_name(active, attrs)
+        )
+
+      _ ->
+        changeset
+    end
+  end
+
   def generate_slug_name(name, _attrs) do
     name
     |> String.normalize(:nfd)
     |> String.downcase()
     |> String.replace(~r/[^a-z0-9-\s]/u, "")
     |> String.replace(~r/\s/, "-")
+  end
+
+  def generate_status_name(active, _attrs) do
+    case active do
+      true -> "active"
+      _ -> "inactive"
+    end
   end
 end

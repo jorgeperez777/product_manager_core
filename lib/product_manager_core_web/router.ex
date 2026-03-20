@@ -83,6 +83,7 @@ defmodule ProductManagerCoreWeb.Router do
       live "/products/:id/edit", ProductLive.Index, :edit
       live "/categories", CategoryLive.Index, :index
       live "/providers", ProviderLive.Index, :index
+      live "/providers/:id/edit", ProviderLive.Index, :edit
     end
   end
 
@@ -105,6 +106,13 @@ defmodule ProductManagerCoreWeb.Router do
       on_mount: [{ProductManagerCoreWeb.UserAuth, :ensure_authenticated}] do
       live "/users", PanelUserLive.Index, :index
     end
+  end
+
+  scope "/api/v1", ProductManagerCoreWeb do
+    pipe_through [:api]
+
+    get "/products", ProductController, :get_products
+    get "/product", ProductController, :get_product_by_slug
   end
 
   scope "/", ProductManagerCoreWeb do

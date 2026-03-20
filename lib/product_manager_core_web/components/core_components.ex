@@ -235,7 +235,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3 dark:bg-neutral-700 dark:hover:bg-neutral-600",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -492,7 +492,7 @@ defmodule ProductManagerCoreWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700 "
+          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
         >
           <tr
             :for={row <- @rows}
@@ -511,7 +511,10 @@ defmodule ProductManagerCoreWeb.CoreComponents do
                 </span>
               </div>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
+            <td
+              :if={@action != []}
+              class="relative w-14 p-0 dark:group-hover:bg-neutral-700 hover:cursor-pointer"
+            >
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
                 <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-gray-100 sm:rounded-r-xl dark:group-hover:bg-neutral-700" />
                 <span
@@ -756,6 +759,38 @@ defmodule ProductManagerCoreWeb.CoreComponents do
     |> JS.hide(to: "##{to}")
   end
 
+  attr(:path, :any, required: true)
+  attr(:meta, :map, default: nil)
+
+  def pagination(assigns) do
+    ~H"""
+    <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+      <div>
+        <p class="text-sm text-gray-700 dark:text-white">
+          Mostrando
+              <!-- space -->
+          <span class="font-medium">{@meta.current_offset}</span>
+          <!-- space -->
+              -
+              <!-- space -->
+          <span class="font-medium">{@meta.next_offset}</span>
+          <!-- space -->
+              de
+              <!-- space -->
+          <span class="font-medium">{@meta.total_count}</span>
+          <!-- space -->
+              resultados
+        </p>
+      </div>
+      <div>
+        <%= if !is_nil(@meta.current_page) do %>
+          <%!-- <Flop.Phoenix.pagination meta={@meta} path={@path} /> --%>
+        <% end %>
+      </div>
+    </div>
+    """
+  end
+
   def generate_avatar_initials(user) do
     initials =
       user.email
@@ -777,5 +812,20 @@ defmodule ProductManagerCoreWeb.CoreComponents do
 
   def has_access?(user_roles, required_roles) do
     Enum.any?(required_roles, fn role -> role in user_roles end)
+  end
+
+  def translate_active_field(field) do
+    case field do
+      "active" -> ~c"Activo"
+      _ -> ~c"Inactivo"
+    end
+  end
+
+  def to_currency(nil), do: Number.Currency.number_to_currency(0.0, precision: 2)
+
+  def to_currency(""), do: Number.Currency.number_to_currency(0.0, precision: 2)
+
+  def to_currency(amount, precision \\ 2) do
+    Number.Currency.number_to_currency(amount, precision: precision)
   end
 end

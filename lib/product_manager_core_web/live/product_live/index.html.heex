@@ -12,11 +12,22 @@
   rows={@streams.products}
   row_click={fn {_id, product} -> JS.navigate(~p"/products/#{product}") end}
 >
+  <:col :let={{_id, product}} label="Imagen">
+    <%= if product.url_image do %>
+      <img src={product.url_image} class="w-10 h-10 rounded-full object-cover" alt={product.name} />
+    <% else %>
+      <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+        <span class="text-gray-500 font-medium text-sm">
+          {String.first(product.name) |> String.upcase()}
+        </span>
+      </div>
+    <% end %>
+  </:col>
   <:col :let={{_id, product}} label="Name">{product.name}</:col>
   <:col :let={{_id, product}} label="Proveedor">{product.provider.name}</:col>
+  <:col :let={{_id, product}} label="Active">{translate_active_field(product.status)}</:col>
   <:col :let={{_id, product}} label="Stock">{product.stock}</:col>
-  <:col :let={{_id, product}} label="Amount">{product.amount}</:col>
-  <:col :let={{_id, product}} label="Categoria">{product.url_image}</:col>
+  <:col :let={{_id, product}} label="Amount">{product.amount |> to_currency()}</:col>
   <:action :let={{_id, product}}>
     <div class="sr-only">
       <.link navigate={~p"/products/#{product}"}>Show</.link>
@@ -33,7 +44,14 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="product-modal" show on_cancel={JS.patch(~p"/products")}>
+<.pagination path={~p"/products"} meta={%{current_offset: 0, next_offset: 0, total_count: 0, current_page: 1}} />
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="product-modal"
+  show
+  on_cancel={JS.patch(~p"/products")}
+>
   <.live_component
     module={ProductManagerCoreWeb.ProductLive.FormComponent}
     id={@product.id || :new}
