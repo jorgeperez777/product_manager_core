@@ -110,7 +110,7 @@ defmodule ProductManagerCoreWeb.Router do
 
   scope "/api/v1", ProductManagerCoreWeb do
     pipe_through [:api]
-
+    options "/*path", ProductController, :options
     get "/products", ProductController, :get_products
     get "/product", ProductController, :get_product_by_slug
   end
