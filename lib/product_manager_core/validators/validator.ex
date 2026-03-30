@@ -7,6 +7,10 @@ defmodule ProductManagerCore.Validators.Validator do
     validate_params(params, &product_by_slug_params/0)
   end
 
+  def category(params) do
+    validate_params(params, &category_params/0)
+  end
+
   defp validate_params(params, validate_schema_fn) do
     with {:ok, validated_params} <- Tarams.cast(params, validate_schema_fn.()) do
       {:ok, validated_params}
@@ -34,6 +38,15 @@ defmodule ProductManagerCore.Validators.Validator do
         },
         default: %{}
       ]
+    }
+  end
+
+  defp category_params() do
+    %{
+      name: [type: :string, default: ""],
+      active: [type: :boolean, default: false],
+      slug: [type: :string],
+      status: [type: :string],
     }
   end
 

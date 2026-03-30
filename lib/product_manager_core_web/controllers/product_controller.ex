@@ -17,7 +17,9 @@ defmodule ProductManagerCoreWeb.ProductController do
 
     with {:ok, params} <- Validators.Validator.product(params),
          {:ok, products} =
-           {:ok, Catalog.list_products(params)} do
+           {:ok, Catalog.list_products(params)},
+         {:ok, products} =
+           {:ok, Enum.filter(products, fn p -> length(p.categories) > 0 end)} do
       render(conn, :index, products: products)
     else
       {:error, error} ->
@@ -27,7 +29,6 @@ defmodule ProductManagerCoreWeb.ProductController do
   end
 
   def get_product_by_slug(conn, params) do
-
     with {:ok, params} <- Validators.Validator.product_by_slug(params),
          {:ok, product} =
            {:ok, Catalog.get_product_by_slug!(params.slug)} do

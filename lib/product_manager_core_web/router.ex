@@ -113,6 +113,7 @@ defmodule ProductManagerCoreWeb.Router do
     options "/*path", ProductController, :options
     get "/products", ProductController, :get_products
     get "/product", ProductController, :get_product_by_slug
+    get "/categories", CategoryController, :get_categories
   end
 
   scope "/", ProductManagerCoreWeb do

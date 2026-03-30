@@ -1,4 +1,5 @@
 defmodule ProductManagerCoreWeb.ProductJSON do
+  alias ProductManagerCoreWeb.CategoryJSON
   alias ProductManagerCore.Catalog.Product
 
   def index(%{products: products}) do
@@ -67,8 +68,8 @@ defmodule ProductManagerCoreWeb.ProductJSON do
         url_image: product.url_image,
         status: product.status,
         stock: product.stock,
-        description: product.description
-        # categories: for(image <- product.images, do: ImageJSON.data(image))
+        description: product.description,
+        categories: for(category <- product.categories, do: CategoryJSON.data(category))
       }
     else
       %{
