@@ -1,4 +1,5 @@
 defmodule ProductManagerCoreWeb.ProductJSON do
+  alias ProductManagerCoreWeb.ProviderJSON
   alias ProductManagerCoreWeb.CategoryJSON
   alias ProductManagerCore.Catalog.Product
 
@@ -57,7 +58,7 @@ defmodule ProductManagerCoreWeb.ProductJSON do
   end
 
   def data(%Product{} = product) do
-    if Ecto.assoc_loaded?(product.categories) do
+    if Ecto.assoc_loaded?(product.categories) && Ecto.assoc_loaded?(product.provider) do
       %{
         id: product.id,
         name: product.name,
@@ -69,6 +70,7 @@ defmodule ProductManagerCoreWeb.ProductJSON do
         status: product.status,
         stock: product.stock,
         description: product.description,
+        provider: ProviderJSON.data(product.provider),
         categories: for(category <- product.categories, do: CategoryJSON.data(category))
       }
     else

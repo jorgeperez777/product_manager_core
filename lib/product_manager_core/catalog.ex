@@ -34,6 +34,25 @@ defmodule ProductManagerCore.Catalog do
       {:active, active}, query ->
         from q in query, where: q.active == ^active
 
+      {:size_items, size_items}, query ->
+        if size_items != "" do
+          size_items_converter =
+            case size_items do
+              nil -> nil
+              _ -> String.to_integer(size_items)
+            end
+
+          if !is_nil(size_items_converter) do
+            from(q in query,
+              limit: ^size_items_converter
+            )
+          else
+            query
+          end
+        else
+          query
+        end
+
       _, query ->
         query
     end)
@@ -355,6 +374,30 @@ defmodule ProductManagerCore.Catalog do
                 q.name,
                 ^"%#{name}%"
               )
+          )
+        else
+          query
+        end
+
+      {:provider_slug, provider_slug}, query ->
+        if !is_nil(provider_slug) do
+          from(q in query,
+            left_join: s in "providers",
+            on: s.id == q.provider_id,
+            where: s.slug == ^provider_slug
+          )
+        else
+          query
+        end
+
+      {:category_slug, category_slug}, query ->
+        if !is_nil(category_slug) do
+          from(q in query,
+            join: pc in "product_categories",
+            on: pc.product_id == q.id,
+            join: c in "categories",
+            on: c.id == pc.category_id,
+            where: c.slug == ^category_slug
           )
         else
           query

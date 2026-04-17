@@ -11,6 +11,10 @@ defmodule ProductManagerCore.Validators.Validator do
     validate_params(params, &category_params/0)
   end
 
+  def provider(params) do
+    validate_params(params, &provider_params/0)
+  end
+
   defp validate_params(params, validate_schema_fn) do
     with {:ok, validated_params} <- Tarams.cast(params, validate_schema_fn.()) do
       {:ok, validated_params}
@@ -31,6 +35,8 @@ defmodule ProductManagerCore.Validators.Validator do
       status_stock: [type: :string],
       status: [type: :string],
       amount: [type: :integer, default: 0],
+      provider_slug: [type: :string],
+      category_slug: [type: :string],
       pagination: [
         type: %{
           size: [type: :string],
@@ -46,13 +52,23 @@ defmodule ProductManagerCore.Validators.Validator do
       name: [type: :string, default: ""],
       active: [type: :boolean, default: false],
       slug: [type: :string],
-      status: [type: :string],
+      status: [type: :string]
     }
   end
 
   defp product_by_slug_params() do
     %{
       slug: [type: :string, required: true]
+    }
+  end
+
+  defp provider_params() do
+    %{
+      name: [type: :string, default: ""],
+      active: [type: :boolean, default: false],
+      slug: [type: :string],
+      status: [type: :string],
+      size_items: [type: :string, default: ""]
     }
   end
 end

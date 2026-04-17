@@ -114,6 +114,7 @@ defmodule ProductManagerCoreWeb.Router do
     get "/products", ProductController, :get_products
     get "/product", ProductController, :get_product_by_slug
     get "/categories", CategoryController, :get_categories
+    get "/providers", ProviderController, :get_providers
   end
 
   scope "/", ProductManagerCoreWeb do
