@@ -425,7 +425,7 @@ defmodule ProductManagerCore.Catalog do
   def get_product!(id), do: Repo.get!(Product, id) |> Repo.preload([:categories, :provider])
 
   def get_product_by_slug!(slug),
-    do: Repo.get_by!(Product, slug: slug) |> Repo.preload([:categories])
+    do: Repo.get_by!(Product, slug: slug) |> Repo.preload([:categories, :provider])
 
   @doc """
   Creates a product.
